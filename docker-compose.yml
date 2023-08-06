@@ -4,22 +4,23 @@ services:
   db:
     image: 'mongo:6.0'
     container_name: 'mongo'
-    env_file:
-      - ./.env
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+#    env_file:
+#      - ./.env
     ports:
-      - '${MONGODB_PORT:-27017}:${MONGODB_PORT:-27017}'
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "urbis"
+      MONGO_INITDB_ROOT_PASSWORD: "urbis_password"
 
   app:
     build: './app'
     container_name: 'app'
-    env_file:
-      - ./.env
-    environment:
-      MONGODB_URI: 'mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}'
+#    env_file:
+#      - ./.env
     ports:
-      - '${APP_PORT:-8000}:${APP_PORT:-8000}'
+      - 8000:8000
+    environment:
+      MONGODB_URI: "mongodb://urbis:urbis_password@db:27017/"
+      MONGODB_DATABASE: "urbis"
     depends_on:
       - db
