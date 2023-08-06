@@ -10,7 +10,7 @@ class Mutation:
         return serializers.UserRetrieve(**data.dict())
 
     @strawberry.mutation
-    async def update_user(self, _id:otypes.PyObjectIdType, data: otypes.UserUpdate) -> otypes.User:
+    async def update_user(self, _id:int, data: otypes.UserUpdate) -> otypes.User:
         user = await models.User.get(_id)
         await user.update({
             "$set": data.to_pydantic().dict(exclude_none=True)
@@ -18,7 +18,7 @@ class Mutation:
         return serializers.UserRetrieve(**user.dict())
 
     @strawberry.field
-    async def auth_user(self, _id: otypes.PyObjectIdType) -> otypes.User:
+    async def auth_user(self, _id: int) -> otypes.User:
         user = await models.User.get(_id)
         data = await user.update({
             "$set": {

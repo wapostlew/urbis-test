@@ -29,7 +29,7 @@ class Dates:
 )
 class User:
 
-    id: PyObjectIdType
+    id: int
     name: strawberry.auto
     surname: strawberry.auto
     dates: strawberry.LazyType["Dates", __name__]

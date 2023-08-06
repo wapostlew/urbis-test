@@ -24,7 +24,7 @@ class UserUpdate(BaseModel):
 
 
 class UserRetrieve(UserCreate):
-    id: PydanticObjectId = Field(alias="_id")
+    id: int = Field(alias="_id")
     dates: UserDates
 
     class Config:

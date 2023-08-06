@@ -11,6 +11,7 @@ db: AsyncIOMotorDatabase = client[os.getenv("MONGODB_DATABASE")]
 
 
 async def init_db():
+    await client.drop_database(os.getenv("MONGODB_DATABASE"))
     await init_beanie(
         database=db,
         document_models=document_models,

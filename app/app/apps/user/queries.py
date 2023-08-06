@@ -8,7 +8,7 @@ from . import serializers, models, otypes
 class Query:
 
     @strawberry.field
-    async def get_user(self, _id: otypes.PyObjectIdType) -> otypes.User:
+    async def get_user(self, _id: int) -> otypes.User:
         data = await models.User.find_one({"_id": _id})
         serialize_data = serializers.UserRetrieve(**data.dict())
         return serialize_data
@@ -23,7 +23,7 @@ class Query:
         return serialize_data
 
     @strawberry.field
-    async def delete_user(self, _id: otypes.PyObjectIdType) -> str:
+    async def delete_user(self, _id: int) -> str:
         data = await models.User.get(_id)
         await data.delete()
         return "User deleted."
