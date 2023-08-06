@@ -2,7 +2,8 @@ import datetime
 
 import strawberry
 
-from . import serializers, models, otypes
+from . import serializers, models, otypes, inputs
+
 
 @strawberry.type
 class Query:
@@ -14,13 +15,30 @@ class Query:
         return serialize_data
 
     @strawberry.field
-    async def get_users(self) -> list[otypes.User]:
-        data = await models.User.find_all().to_list()
+    async def get_users(
+            self,
+            filters: inputs.UserFilterMeta | None = serializers.UserFilter(),
+            pagination: inputs.UserPaginationPage | None = serializers.UserPaginationPage()
+    ) -> otypes.ListResponse:
+        data = await models.User.find_many(
+            {
+                str(k):v
+                for k,v in filters.to_pydantic().dict(exclude_none=True).items()
+            },
+            skip=(pagination.page - 1) * pagination.size,
+            limit=pagination.size
+        ).to_list()
+
         serialize_data = [
             serializers.UserRetrieve(**item.dict())
             for item in data
         ]
-        return serialize_data
+
+        return serializers.UserResponse(
+            data=serialize_data,
+            pagination=pagination.to_pydantic(),
+            filters=filters.to_pydantic()
+        )
 
     @strawberry.field
     async def delete_user(self, _id: int) -> str:

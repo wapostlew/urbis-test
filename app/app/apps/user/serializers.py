@@ -31,3 +31,19 @@ class UserRetrieve(UserCreate):
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
         json_encoders = {PydanticObjectId: str}
+
+
+class UserPaginationPage(BaseModel):
+    page: int = 0
+    size: int = 0
+
+
+class UserFilter(BaseModel):
+    name: str | None = None
+    surname: str | None = None
+
+
+class UserResponse(BaseModel):
+    data: list[UserRetrieve]
+    pagination: UserPaginationPage
+    filters: UserFilter

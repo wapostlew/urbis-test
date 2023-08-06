@@ -1,16 +1,16 @@
 import strawberry, datetime
-from . import serializers, models, otypes
+from . import serializers, models, otypes, inputs
 
 
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    async def add_user(self, data: otypes.UserCreate) -> otypes.User:
+    async def add_user(self, data: inputs.UserCreate) -> otypes.User:
         data = await models.User(name=data.name, surname=data.surname).create()
         return serializers.UserRetrieve(**data.dict())
 
     @strawberry.mutation
-    async def update_user(self, _id:int, data: otypes.UserUpdate) -> otypes.User:
+    async def update_user(self, _id:int, data: inputs.UserUpdate) -> otypes.User:
         user = await models.User.get(_id)
         await user.update({
             "$set": data.to_pydantic().dict(exclude_none=True)
