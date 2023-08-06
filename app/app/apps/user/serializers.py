@@ -5,8 +5,12 @@ from pydantic import BaseModel, Field
 
 
 class UserDates(BaseModel):
-    lastlogin_date: datetime.datetime | None = Field(default=None, serialization_alias="lastlogin")
-    register_date: datetime.datetime = Field(default_factory=datetime.datetime.now, serialization_alias="register")
+    lastlogin_date: datetime.datetime | None = Field(alias="lastlogin")
+    register_date: datetime.datetime = Field(alias="register")
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
 
 
 class UserCreate(BaseModel):
@@ -15,10 +19,15 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    name: str | None = None
-    surname: str | None = None
+    name: str | None
+    surname: str | None
 
 
 class UserRetrieve(UserCreate):
-    id: PydanticObjectId = Field(serialization_alias="_id")
+    id: PydanticObjectId = Field(alias="_id")
     dates: UserDates
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {PydanticObjectId: str}
