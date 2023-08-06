@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  db:
+    image: 'mongo:6.0'
+    container_name: 'mongo'
+    env_file:
+      - ./.env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+    ports:
+      - '${MONGODB_PORT:-27017}:${MONGODB_PORT:-27017}'
+
+  app:
+    build: './app'
+    container_name: 'app'
+    env_file:
+      - ./.env
+    environment:
+      MONGODB_URI: 'mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}'
+    ports:
+      - '${APP_PORT:-8000}:${APP_PORT:-8000}'
+    depends_on:
+      - db

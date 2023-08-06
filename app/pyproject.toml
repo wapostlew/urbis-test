@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = ["Waldemar Apostle <wapostlew@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.101.0"
+uvicorn = {extras = ["standart"], version = "^0.23.2"}
+gunicorn = "^21.2.0"
+beanie = "^1.21.0"
+strawberry-graphql = {extras = ["fastapi"], version = "^0.199.2"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
