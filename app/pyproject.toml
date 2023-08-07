@@ -17,7 +17,6 @@ faker = "^19.2.0"
 
 
 [tool.poetry.group.dev.dependencies]
-mongomock-motor = "^0.0.21"
 pytest = "^7.4.0"
 httpx = "^0.24.1"
 pytest-mock = "^3.11.1"

@@ -1,24 +1,11 @@
-import datetime
 import strawberry
-
-from beanie import PydanticObjectId
 
 from . import models, serializers
 
 
-PyObjectIdType = strawberry.scalar(
-    PydanticObjectId,
-    serialize=str,
-    parse_value=lambda v: PyObjectIdType(v)
-)
-
 @strawberry.experimental.pydantic.type(
     model=serializers.UserDates,
-    # all_fields=True
-    fields=[
-        "lastlogin_date",
-        "register_date",
-    ]
+    all_fields=True
 )
 class Dates:
     pass
@@ -32,7 +19,7 @@ class User:
     id: int
     name: strawberry.auto
     surname: strawberry.auto
-    dates: strawberry.LazyType["Dates", __name__]
+    dates: Dates
 
 
 @strawberry.experimental.pydantic.input(
@@ -84,6 +71,6 @@ class Filter:
     model=serializers.UserResponse
 )
 class ListResponse:
-    data: list[strawberry.LazyType["User", __name__]]
+    data: list[User]
     pagination: Pagination | None
     filters: Filter | None
